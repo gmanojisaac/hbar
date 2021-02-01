@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Client, PrivateKey, AccountCreateTransaction, AccountBalanceQuery, Hbar }from '@hashgraph/sdk';
+import { Client, PrivateKey, AccountCreateTransaction, AccountBalanceQuery, Hbar } from '@hashgraph/sdk';
 import { environment } from '../environments/environment';
 @Component({
   selector: 'app-root',
@@ -10,14 +10,25 @@ export class AppComponent {
   title = 'HBAR';
   myAccountId = environment.accountId;
   myPrivateKey = environment.privateKey;
-  constructor(){
-    const client = Client.forTestnet();    
-    client.setOperator(this.myAccountId, this.myPrivateKey);
+  newAccountTransactionId: any;
+  client;
+  getReceipt: any;
+  constructor() {
+    this.client = Client.forTestnet();
+    this.client.setOperator(this.myAccountId, this.myPrivateKey);
+    const newAccountPrivateKey = PrivateKey.generate();
+    const newAccountPublicKey = newAccountPrivateKey.publicKey;
 
-    const newAccountTransactionId = new AccountCreateTransaction()
-    .setKey(environment.publicKey)
-    .setInitialBalance(Hbar.fromTinybars(1000))
-    .execute(client);
-    console.log(newAccountTransactionId);
+    this.newAccountTransactionId = new AccountCreateTransaction()
+      .setKey(newAccountPublicKey)
+      .setInitialBalance(Hbar.fromTinybars(1000))
+      .execute(this.client).then(success => {
+
+        this.getReceipt = success.getReceipt(this.client).then(successreceipt => {
+          console.log('28', successreceipt);
+          const newAccountId = successreceipt.accountId;
+          console.log("The new account ID is: " + newAccountId);
+        });
+      });
   }
 }

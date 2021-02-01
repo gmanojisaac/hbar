@@ -23,6 +23,13 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "./node_modules/@hashgraph",
+              "./node_modules/@hashgraph/sdk",
+              "@hashgraph/sdk",
+              "@hashgraph/proto",
+              "@hashgraph/cryptography"
+           ],
             "outputPath": "dist/HBAR",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -71,7 +78,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "HBAR:build"
+            "browserTarget": "HBAR:build",
+            "proxyConfig": "src/proxy.conf.json"
           },
           "configurations": {
             "production": {
