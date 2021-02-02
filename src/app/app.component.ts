@@ -40,7 +40,7 @@ export class AppComponent {
        console.log(aftertransfer);
        aftertransfer.getReceipt(this.client).then(getreceipt=>{
         console.log("The transfer transaction from my account to the new account was: " + getreceipt.status.toString(),getreceipt);
-        new AccountBalanceQuery().setAccountId(<AccountId>getreceipt.accountId)
+        new AccountBalanceQuery().setAccountId(this.myAccountId)
      .execute(this.client).then(successlatestaccount=>{
       console.log("The new account balance is: " +successlatestaccount.hbars.toTinybars() +" tinybar.");
      });
